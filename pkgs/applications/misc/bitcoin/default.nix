@@ -1,11 +1,11 @@
-{ fetchurl, fetchgit, stdenv, openssl, db4, boost, zlib, miniupnpc, qt4 }:
+{ fetchurl, fetchgit, stdenv, openssl, db4, boost, zlib, miniupnpc, qt4, glib }:
 
 with stdenv.lib;
 
 let
 
   buildBitcoinPackage = a@{binName ? "bitcoin", ...}: stdenv.mkDerivation ({
-    buildInputs = [ openssl db4 boost zlib miniupnpc qt4 ];
+    buildInputs = [ openssl db4 boost zlib miniupnpc qt4 glib ] ++ a.extraBuildInputs or [];
     configurePhase = "qmake";
     installPhase = "install -D ${binName}-qt $out/bin/${binName}-qt";
     meta = {
@@ -15,7 +15,7 @@ let
   } // a);
 
   buildBitcoinPackageHeadless = a@{binName ? "bitcoin", ...}: stdenv.mkDerivation ({
-    buildInputs = [ openssl db4 boost zlib miniupnpc ];
+    buildInputs = [ openssl db4 boost zlib miniupnpc glib ] ++ a.extraBuildInputs or [];
     preBuild = "cd src";
     makefile = "makefile.unix";
     installPhase = "install -D ${binName}d $out/bin/${binName}";
@@ -84,6 +84,10 @@ let
       url = "https://github.com/namecoin/namecoin/archive/nc${version}.tar.gz";
       sha256 = "0r6zjzichfjzhvpdy501gwy9h3zvlla3kbgb38z1pzaa0ld9siyx";
     };
+
+    patches = [ ./namecoin_dynamic.patch ];
+
+    extraBuildInputs = [ glib ];
 
     meta = {
       description = "Namecoin is a decentralized key/value registration and transfer system based on Bitcoin technology.";
