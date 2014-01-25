@@ -96,6 +96,23 @@ let
     };
   };
 
+  ppcoin = rec {
+    binName = "ppcoin";
+    name = "ppcoin-${version}";
+    version = "0.3.0";
+
+    src = fetchurl {
+      url = "https://github.com/ppcoin/ppcoin/archive/v${version}ppc.tar.gz";
+      sha256 = "09jnl6jmam4bm3g9ajf9dyfa6wy6fnczz9rl3d1hwdwv7gwb01vc";
+    };
+
+    meta = {
+      description = "Cryptocurrency using proof-of-stake.";
+      homepage = http://peercoin.net;
+      maintainers = [ maintainers.falsifian ];
+    };
+  };
+
 
 in {
   inherit buildBitcoinPackage buildBitcoinPackageHeadless;
@@ -106,4 +123,6 @@ in {
   litecoin = buildBitcoinPackageHeadless litecoin;
   namecoin-qt = buildBitcoinPackage namecoin;
   namecoin = buildBitcoinPackageHeadless namecoin;
+  ppcoin-qt = buildBitcoinPackage ppcoin;
+  ppcoin = buildBitcoinPackageHeadless ppcoin;
 }
