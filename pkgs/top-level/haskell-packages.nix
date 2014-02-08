@@ -2771,6 +2771,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     QuickCheck = self.QuickCheck2;
   };
 
+  taffybar = callPackage ../applications/misc/taffybar {};
+
   yi = callPackage ../applications/editors/yi/yi.nix {};
 
   yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
