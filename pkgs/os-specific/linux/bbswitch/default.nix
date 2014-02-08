@@ -15,6 +15,8 @@ stdenv.mkDerivation {
     sha256 = "0na6gfnvmp5fjbm430ms342hmrsbr6cf78n6hldqb8js2ry3f8dw";
   };
 
+  patches = [ ./bbswitch-3.13.patch ];
+
   preBuild = ''
     substituteInPlace Makefile \
       --replace "\$(shell uname -r)" "${kernel.modDirVersion}" \
