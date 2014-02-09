@@ -29,6 +29,7 @@
   ./hardware/network/intel-3945abg.nix
   ./hardware/network/ralink.nix
   ./hardware/network/rtl8192c.nix
+  ./hardware/opengl.nix
   ./hardware/pcmcia.nix
   ./hardware/video/bumblebee.nix
   ./installer/tools/nixos-checkout.nix
@@ -237,7 +238,6 @@
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
-  ./services/x11/mesa.nix
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
