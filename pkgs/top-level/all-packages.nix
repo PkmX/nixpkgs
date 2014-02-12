@@ -4950,6 +4950,8 @@ let
 
   libpcap = callPackage ../development/libraries/libpcap { };
 
+  libpdf = callPackage ../applications/networking/browsers/chromium/libpdf.nix { };
+
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
@@ -9096,12 +9098,24 @@ let
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
-  wrapChromium = browser: wrapFirefox {
-    inherit browser;
-    browserName = browser.packageName;
-    desktopName = "Chromium";
-    icon = "${browser}/share/icons/hicolor/48x48/apps/${browser.packageName}.png";
-  };
+  wrapChromium = chromium:
+    let
+      browser = stdenv.mkDerivation rec {
+        inherit (chromium) name packageName;
+        libExecPath = "${chromium}/libexec/${packageName}";
+
+        buildInputs = [ makeWrapper ];
+
+        flags = if config.chromium.enableLibpdf or false then ''--add-flags "'--register-pepper-plugins=${libpdf}/libpdf.so;application/pdf'"'' else "";
+
+        buildCommand = ''ensureDir $out/bin ; makeWrapper "${libExecPath}/${packageName}" "$out/bin/${packageName}" ${flags}'';
+      };
+    in wrapFirefox {
+      inherit browser;
+      browserName = browser.packageName;
+      desktopName = "Chromium";
+      icon = "${browser}/share/icons/hicolor/48x48/apps/${browser.packageName}.png";
+    };
 
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
